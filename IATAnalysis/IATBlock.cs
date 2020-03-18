@@ -44,7 +44,7 @@ namespace IATAnalysis
         public void EliminateOutliers() 
         {
             // Get all trials with latencies smaller than 10,000ms
-            QuestionList = QuestionList.FindAll(q => q.Latency > 100 && q.Latency < 10000);
+            QuestionList = QuestionList.FindAll(q => q.Latency > 0 && q.Latency < 10000);
         } // Step 2
 
         public void CalculateCorrectMean()
