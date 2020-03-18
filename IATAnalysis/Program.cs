@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -9,7 +10,7 @@ namespace IATAnalysis
         [STAThread]
         static void Main(string[] args)
         {
-            Console.WriteLine("IAT D-score calculator. See README for required data format and folder organisation.\r\n");
+            Console.WriteLine("IAT D-score calculator. See README for required data format and folder organisation.");
 
             int programOption = 0;
 
@@ -18,13 +19,13 @@ namespace IATAnalysis
             while (programOption != 3)
             {
 
-                Console.WriteLine("Select: 1 - Calculate a D-score; 2 - change experiment folder, 3 - exit");
+                Console.WriteLine("\r\nSelect: 1 - Calculate a D-score; 2 - change experiment folder, 3 - exit");
                 programOption = int.Parse(Console.ReadLine());
 
                 if (programOption == 1)
                 {
                     // Selecting test.
-                    double[] score = CalculateDScore(dataDir);
+                    List<double> score = CalculateDScores(dataDir);
                     Console.WriteLine("D-score for first (null) IAT is: " + score[0] + "\r\n" +
                         "D-score for second (real) IAT is: " + score[1]);
                 }
@@ -52,14 +53,13 @@ namespace IATAnalysis
             return fbd.SelectedPath + @"\";
         }
 
-        static double[] CalculateDScore(String dataDir)
+        static List<double> CalculateDScores(String dataDir)
         {
-            Console.WriteLine("Calculating D-score...");
-            double[] dScore = new double[]{ 0, 0 };
+            Console.WriteLine("Calculating D-scores...");
 
             IATDataFormatter iatDF = new IATDataFormatter(dataDir);
 
-            return dScore;
+            return iatDF.GetDScores();
         }
     }
 }

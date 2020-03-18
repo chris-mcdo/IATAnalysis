@@ -10,14 +10,13 @@ namespace IATAnalysis
         public List<IATTest> TestList;
 
         public String DataDir;
+
         public IATDataFormatter(String dataDir)
         {
             DataDir = dataDir;
             Console.WriteLine("New IATDataFormatter object from dir " + DataDir);
             GetTestList();
         }
-
-        public bool CheckedValid = false;
 
         public void GetTestList()
         {
@@ -36,14 +35,27 @@ namespace IATAnalysis
             }
         }
 
-        public double[] GetDScore()
+        public List<double> GetDScores()
         {
-            double[] score = new double[TestList.Count];
-            for (int i = 0; i<TestList.Count; i++)
+            List<double> scores = new List<double>();
+            foreach (IATTest test in TestList)
             {
-                // perform steps; see whether it is valid; get score for each test.
+                scores.Add(DScore(test));
             }
-            return score;
+            return scores;
+        }
+
+        public double DScore(IATTest test)
+        {
+            // Performing steps 1-7, returning D-score result
+
+            test.RemoveBlocks();
+            test.EliminateQuestions();
+            if (!test.IsSubjectValid()) return -1000; // if subject is invalid, test score -1000 is returned
+            test.CalculateMeanLatencies();
+            test.CalculateSDs();
+            test.ReplaceErrorLatencies();
+            return test.GetDScore();
         }
     }
 }
